@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hugo博客 on OneTool 博客</title><link>https://blog.onetool.app/tags/hugo%E5%8D%9A%E5%AE%A2/</link><description>Recent content in Hugo博客 on OneTool 博客</description><generator>Hugo -- gohugo.io</generator><language>zh-Hans</language><lastBuildDate>Wed, 18 Dec 2024 15:35:19 +0800</lastBuildDate><atom:link href="https://blog.onetool.app/tags/hugo%E5%8D%9A%E5%AE%A2/index.xml" rel="self" type="application/rss+xml"/><item><title>白嫖Cloudflare，搭建免费图床</title><link>https://blog.onetool.app/p/image-hosting/</link><pubDate>Wed, 18 Dec 2024 15:35:19 +0800</pubDate><guid>https://blog.onetool.app/p/image-hosting/</guid><description>&lt;img src="https://img.onetool.app:/2024/12/c13ba8845062277801d1a8a6931af1c1.webp" alt="Featured image of post 白嫖Cloudflare，搭建免费图床" />&lt;p>图床是一个专门用来存储和管理图片的服务器或服务。通过图床，我们可以将图片上传到网络上，并生成一个可以访问的链接。这样在写博客、发帖或者其他需要使用图片的场景中，只需要引用图片链接即可，而不需要将图片嵌入到文章中。&lt;/p>
+&lt;p>在这篇文章中，我将介绍如何使用 Cloudflare 的 R2 服务搭建一个免费的图床，并且搭配 PicGo 工具快速上传图片。&lt;/p>
+&lt;h2 id="cloudflare-r2">Cloudflare R2
+&lt;/h2>&lt;p>&lt;a class="link" href="https://developers.cloudflare.com/r2/" target="_blank" rel="noopener"
+>Cloudflare R2 对象存储&lt;/a> 允许开发人员存储大量非结构化数据，而无需支付与典型云存储服务相关的昂贵的出口带宽费用，并且有 10G 的免费存储额度，对于个人博客来说足够使用了。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/b3048be3504614cdec08a761acb2af4c.webp"
+loading="lazy"
+alt="免费额度"
+>&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.cloudflare.com/zh-cn/" target="_blank" rel="noopener"
+>登录 Cloudflare &lt;/a> ，没有账号的话自己注册一个。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>从左侧菜单栏中找到 &lt;code>R2对象存储&lt;/code> ，点击进入 R2 管理页面&lt;/p>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--note">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>&lt;/svg>
+Note
+&lt;/div>
+&lt;p>如果没有开通 R2 服务，需要先开通服务，绑定信用卡或 PayPal，这里推荐 &lt;a class="link" href="https://bewildcard.com/i/DAK" target="_blank" rel="noopener"
+>WildCard 的虚拟信用卡&lt;/a>，可以免费申请。&lt;/p>
+&lt;/div>
+&lt;/li>
+&lt;li>
+&lt;p>点击 &lt;code>Create bucket&lt;/code> 创建存储桶。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/31e9950bac5a8ad328b2a65a93f7e549.webp"
+loading="lazy"
+alt="创建存储桶"
+>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>填写存储桶名称，选择存储桶区域，点击 &lt;code>Create&lt;/code> 创建存储桶。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/19b819d6b171f4972093beaf6cbb1d59.webp"
+loading="lazy"
+alt="创建存储桶"
+>&lt;/p>
+&lt;p>此时我们已经可以向存储桶上传文件了，可以选择在网页直接上传文件或文件夹。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>配置 S3 API，以便使用 PicGo 上传图片。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/772bee6456e9a2d12f7d160dba9c1b8b.webp"
+loading="lazy"
+alt="创建API令牌"
+>
+&lt;img src="https://img.onetool.app:/2024/12/4b14aa84b09e5706550e38a46045e987.webp"
+loading="lazy"
+alt="创建API令牌2"
+>&lt;/p>
+&lt;p>完成创建后会显示所有密钥，PicGo 配置需要，因为只会显示一次，建议在密码管理软件或其他地方妥善保管好这些参数信息。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>配置自定义域名&lt;/p>
+&lt;p>进入存储桶的设置，配置自定义域名或启用 r2.dev 域名。
+&lt;img src="https://img.onetool.app:/2024/12/a302be0ec8bab761fb51e244d64e05e0.webp"
+loading="lazy"
+alt="配置自定义域名"
+>&lt;/p>
+&lt;p>至此，我们需要在 Cloudflare R2 上配置的部分就完成了，接下来我们需要配置 PicGo 客户端。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="picgo">PicGo
+&lt;/h2>&lt;p>PicGo 是一个图片上传工具，支持多种图床。&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>下载并安装 PicGo&lt;/p>
+&lt;p>进入官方仓库 &lt;a class="link" href="https://github.com/Molunerfinn/PicGo" target="_blank" rel="noopener"
+>PicGo&lt;/a> ，下载对应平台的安装包。&lt;/p>
+&lt;p>基本操作参照官方文档即可。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>安装插件&lt;/p>
+&lt;p>Picgo 默认是不支持 S3 图床的，需要安装插件。我使用了以下插件，可视情况安装。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/4c186328b1d1a068d1becdc625fa160e.webp"
+loading="lazy"
+alt="安装插件"
+>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://github.com/wayjam/picgo-plugin-s3" target="_blank" rel="noopener"
+>picgo-plugin-s3&lt;/a>
+让 Picgo 支持 S3 图床上传&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://github.com/PicGo/picgo-plugin-pic-migrater" target="_blank" rel="noopener"
+>picgo-plugin-pic-migrater&lt;/a>
+将本地图片批量迁移到图床&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://github.com/fhyoga/picgo-plugin-watermark" target="_blank" rel="noopener"
+>picgo-plugin-watermark&lt;/a>
+为图片添加水印&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://github.com/JuZiSang/picgo-plugin-compress" target="_blank" rel="noopener"
+>picgo-plugin-compress&lt;/a>
+压缩图片&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>其他插件可查看&lt;a class="link" href="https://github.com/PicGo/Awesome-PicGo" target="_blank" rel="noopener"
+> Awesome-PicGo 插件列表&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>配置 PicGo&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>在 PicGo 中添加一个 &lt;code>Amazon S3&lt;/code> 类型的图床，将 Cloudflare R2 的配置信息填入即可。
+&lt;img src="https://img.onetool.app:/2024/12/8127ce10014c8d9af001eb6d8d59497b.webp"
+loading="lazy"
+alt="新增图床"
+>
+&lt;img src="https://img.onetool.app:/2024/12/9431a14a3a421996d6416c0d21ef5761.webp"
+loading="lazy"
+alt="图床配置"
+>&lt;/p>
+&lt;p>自定义输出模板是 &lt;code>{protocol}://img.onetool.app:{port}/{path}&lt;/code>，可以换成自己的域名，这样上传图片后，剪贴板的链接就是自定义的域名。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>其他插件配置参考对应插件文档即可，都很简单。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="截图工具">截图工具
+&lt;/h2>&lt;p>截图工具可以使用微信、QQ 等软件的截图功能，而我使用的是 &lt;a class="link" href="https://pixpin.cn/docs/" target="_blank" rel="noopener"
+>PixPin&lt;/a>，简单来说是一个截图、贴图的工具，但是 PixPin 以截图和贴图两大功能为核心做了大量的优化功能，目标是提升用户在工作时的工作效率，无论用户使用电脑做何种工作，都可以使用 PixPin 提高工作效率。&lt;/p>
+&lt;p>比如支持 GIF 录制：&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/3e61d2347fb97b22cd46dda302f031d2.gif"
+loading="lazy"
+alt="GIF录制"
+>&lt;/p>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--warning">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>&lt;/svg>
+Warning
+&lt;/div>
+&lt;p>目前使用的图片水印插件 &lt;code>watermark 1.2.1&lt;/code>，上传 GIF 图片会报错，需要禁用插件。&lt;/p>
+&lt;/div>
+&lt;p>配置好图床后，就可以顺畅的写文章啦，发布到多个平台也更加方便。&lt;/p></description></item><item><title>记录一下使用 Hugo 搭建个人博客</title><link>https://blog.onetool.app/p/create-blog/</link><pubDate>Wed, 18 Dec 2024 15:35:19 +0800</pubDate><guid>https://blog.onetool.app/p/create-blog/</guid><description>&lt;img src="https://img.onetool.app:/2024/12/fd60eec47780a43dd3502b3810474a7c.webp" alt="Featured image of post 记录一下使用 Hugo 搭建个人博客" />&lt;p>在当今信息爆炸的时代，我决定创建这个个人博客来沉淀自己的思考和经验。一方面，写博客能帮助我更系统地整理知识，将零散的想法形成完整的体系；另一方面，也希望通过分享，能与志同道合的朋友交流学习，共同进步。&lt;/p>
+&lt;p>虽然现在已经有很多现成的博客平台，但我选择从零开始搭建，既是为了获得更大的自由度和可定制性，也是一次学习和实践的机会。在这篇文章中，我将记录整个博客的搭建过程，希望能对有类似想法的朋友有所帮助。&lt;/p>
+&lt;h2 id="说明">说明
+&lt;/h2>&lt;ul>
+&lt;li>
+&lt;p>本博客使用的是 hugo 的 &lt;a class="link" href="https://stack.jimmycai.com/" target="_blank" rel="noopener"
+>Stack 主题&lt;/a>，该主题提供了一个&lt;a class="link" href="https://github.com/CaiJimmy/hugo-theme-stack-starter" target="_blank" rel="noopener"
+>快速启动模板&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>部署在 github pages 上，使用 github action 自动部署。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="环境安装">环境安装
+&lt;/h2>&lt;p>在 Windows 中，hugo 的安装很简单，只需要按照&lt;a class="link" href="https://gohugo.io/installation/windows/" target="_blank" rel="noopener"
+>官方文档的步骤&lt;/a>进行即可。&lt;/p>
+&lt;h3 id="安装必备软件">安装必备软件:
+&lt;/h3>&lt;ul>
+&lt;li>&lt;a class="link" href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git" target="_blank" rel="noopener"
+>安装 Git&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://go.dev/doc/install" target="_blank" rel="noopener"
+>安装 GO&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://gohugo.io/hugo-pipes/transpile-sass-to-css/#dart-sass" target="_blank" rel="noopener"
+>安装 Dart Sass&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h3 id="安装-hugo">安装 hugo
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">choco install hugo-extended
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 验证安装&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hugo version
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果成功打印出 hugo 的版本号，则说明安装成功。可以根据&lt;a class="link" href="https://gohugo.io/getting-started/quick-start/" target="_blank" rel="noopener"
+>官方快速开始教程&lt;/a>尝试创建一个博客。&lt;/p>
+&lt;h2 id="安装部署">安装部署
+&lt;/h2>&lt;p>一种方式是根据 &lt;a class="link" href="https://github.com/CaiJimmy/hugo-theme-stack-starter" target="_blank" rel="noopener"
+>Stack 主题的快速启动模板&lt;/a> 的步骤创建部署，非常简单。&lt;/p>
+&lt;p>如果你想将源码放在私有仓库上，通过 github action 将编译后的代码部署到另一个公开仓库，可以参考以下步骤。&lt;/p>
+&lt;h3 id="创建仓库">创建仓库
+&lt;/h3>&lt;p>首先要在 github 上创建两个仓库：
+&lt;img src="https://img.onetool.app:/2024/12/df1f946b9bb16c9d7dba486bd1e39e71.webp"
+loading="lazy"
+alt="创建仓库"
+>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>test-blog-private&lt;/strong> 用于存放源码&lt;/li>
+&lt;li>&lt;strong>onetoolapp.github.io&lt;/strong> 用于存放编译后的代码&lt;/li>
+&lt;/ul>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--tip">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"/>&lt;/svg>
+Tip
+&lt;/div>
+&lt;p>如果你要使用 github 的免费域名，公开的仓库必须命名为 &lt;code>&amp;lt;username&amp;gt;.github.io&lt;/code> 。username 是你的 github 用户名。有自己域名的话，可以随意命名。&lt;/p>
+&lt;/div>
+&lt;h3 id="上传代码">上传代码
+&lt;/h3>&lt;p>先将主题代码 clone 到本地&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">git clone https://github.com/CaiJimmy/hugo-theme-stack-starter.git
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>修改远程仓库地址&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">git remote set-url origin https://github.com/onetoolapp/test-blog-private.git
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看远程仓库地址&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git remote -v
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 推送代码&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>推送完成后，可以看到仓库有两个分支，分别是 &lt;code>main&lt;/code> 和 &lt;code>gh-pages&lt;/code>。但这是一个私有仓库，如果想要启用 github pages，必须是 GitHub Pro 账户，或者将仓库公开。
+&lt;img src="https://img.onetool.app:/2024/12/40e63ef44bc41c0ad4b2abc0a8708468.webp"
+loading="lazy"
+alt="github pages"
+>
+接下来，我们修改一下配置，让 github action 将编译后的代码部署到另一个公开仓库。&lt;/p>
+&lt;h3 id="修改配置">修改配置
+&lt;/h3>&lt;p>网站是通过 github action 部署的，先来看一下部署配置。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># .github/workflows/deploy.yml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="l">// ...&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy 🚀&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">JamesIves/github-pages-deploy-action@v4&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">branch&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">gh-pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">folder&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">public&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">clean&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">single-commit&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>查看这个&lt;a class="link" href="https://github.com/JamesIves/github-pages-deploy-action" target="_blank" rel="noopener"
+>github-pages-deploy-action 的文档&lt;/a> 的文档，可以看到如何配置推送到另一个仓库。&lt;/p>
+&lt;p>将部署相关配置进行如下修改：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="hl">&lt;span class="lnt">52
+&lt;/span>&lt;/span>&lt;span class="hl">&lt;span class="lnt">53
+&lt;/span>&lt;/span>&lt;span class="hl">&lt;span class="lnt">54
+&lt;/span>&lt;/span>&lt;span class="hl">&lt;span class="lnt">55
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="l">// ...&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy 🚀&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">JamesIves/github-pages-deploy-action@v4&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">branch&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">gh-pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">folder&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">public&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">clean&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">single-commit&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line hl">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># 目标仓库名，GitHub用户名/目标仓库名&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line hl">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">repository-name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">onetoolapp/onetoolapp.github.io&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line hl">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># 能够访问目标仓库的 PAT token&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line hl">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">token&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.TEST_BLOG_DEPLOY_TOKEN }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>PAT token，是 github 的 personal access token，用于授权 github action 访问目标仓库。接来下需要创建并配置这个密钥。&lt;/p>
+&lt;h3 id="创建并设置-pat-token">创建并设置 PAT token
+&lt;/h3>&lt;p>在 github 上，点击右上角的头像，选择 &lt;code>Settings&lt;/code>，然后选择 &lt;code>Developer settings&lt;/code>，再选择 &lt;code>Personal access tokens&lt;/code>，点击 &lt;code>Generate new token&lt;/code>。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/1b4eaf57138752577773edf1024d3930.webp"
+loading="lazy"
+alt="创建一个新的token"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/037164db4dfffec032be1cef75f5c165.webp"
+loading="lazy"
+alt="设置名称"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/eaddb810061c75533fa73be7d54a170d.webp"
+loading="lazy"
+alt="选择有效期"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/137cc498c2cb4dac77757d37b0becfbb.webp"
+loading="lazy"
+alt="选择可访问的仓库"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/e86ef209c9755a8d34c03b8b3356a53c.webp"
+loading="lazy"
+alt="设置仓库权限"
+>&lt;/p>
+&lt;p>然后点击 &lt;code>Generate token&lt;/code>，将生成的 token 复制保存下来。&lt;/p>
+&lt;p>接下来来到私有仓库 &lt;code>test-blog-private&lt;/code> 的 &lt;code>Settings&lt;/code> 页面，选择 &lt;code>Secrets and variables&lt;/code>，然后选择 &lt;code>Actions&lt;/code>，点击 &lt;code>New repository secret&lt;/code>。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/f94aee16ae3ca81a5599982ab44919d9.webp"
+loading="lazy"
+alt="配置 actions密钥"
+>&lt;/p>
+&lt;p>配置后，重新提交代码，稍等片刻，可以看到 github action 执行成功了。编译后的代码也自动发布在公开仓库。
+&lt;img src="https://img.onetool.app:/2024/12/ce11cb751197c5ceded7613b274096e8.webp"
+loading="lazy"
+alt="github action 执行成功"
+>
+&lt;img src="https://img.onetool.app:/2024/12/801f23d39ba9016f32d0b1fae87cedc0.webp"
+loading="lazy"
+alt="编译后的代码"
+>&lt;/p>
+&lt;h2 id="安装完成">安装完成
+&lt;/h2>&lt;p>访问 &lt;code>https://onetoolapp.github.io&lt;/code> ，可以看到博客已经成功部署了。
+&lt;img src="https://img.onetool.app:/2024/12/48a4b5b7619506104044d58252937db2.webp"
+loading="lazy"
+alt="alt text"
+>&lt;/p>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--note">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>&lt;/svg>
+Note
+&lt;/div>
+&lt;p>本地址将作为示例，可以直接访问&lt;/p>
+&lt;/div>
+&lt;p>接下来，可以参考官方文档和主题文档，进行一些个性化配置，然后开始写文章发布啦。&lt;/p></description></item></channel></rss>

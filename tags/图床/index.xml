@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>图床 on OneTool 博客</title><link>https://blog.onetool.app/tags/%E5%9B%BE%E5%BA%8A/</link><description>Recent content in 图床 on OneTool 博客</description><generator>Hugo -- gohugo.io</generator><language>zh-Hans</language><lastBuildDate>Wed, 18 Dec 2024 15:35:19 +0800</lastBuildDate><atom:link href="https://blog.onetool.app/tags/%E5%9B%BE%E5%BA%8A/index.xml" rel="self" type="application/rss+xml"/><item><title>白嫖Cloudflare，搭建免费图床</title><link>https://blog.onetool.app/p/image-hosting/</link><pubDate>Wed, 18 Dec 2024 15:35:19 +0800</pubDate><guid>https://blog.onetool.app/p/image-hosting/</guid><description>&lt;img src="https://img.onetool.app:/2024/12/c13ba8845062277801d1a8a6931af1c1.webp" alt="Featured image of post 白嫖Cloudflare，搭建免费图床" />&lt;p>图床是一个专门用来存储和管理图片的服务器或服务。通过图床，我们可以将图片上传到网络上，并生成一个可以访问的链接。这样在写博客、发帖或者其他需要使用图片的场景中，只需要引用图片链接即可，而不需要将图片嵌入到文章中。&lt;/p>
+&lt;p>在这篇文章中，我将介绍如何使用 Cloudflare 的 R2 服务搭建一个免费的图床，并且搭配 PicGo 工具快速上传图片。&lt;/p>
+&lt;h2 id="cloudflare-r2">Cloudflare R2
+&lt;/h2>&lt;p>&lt;a class="link" href="https://developers.cloudflare.com/r2/" target="_blank" rel="noopener"
+>Cloudflare R2 对象存储&lt;/a> 允许开发人员存储大量非结构化数据，而无需支付与典型云存储服务相关的昂贵的出口带宽费用，并且有 10G 的免费存储额度，对于个人博客来说足够使用了。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/b3048be3504614cdec08a761acb2af4c.webp"
+loading="lazy"
+alt="免费额度"
+>&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.cloudflare.com/zh-cn/" target="_blank" rel="noopener"
+>登录 Cloudflare &lt;/a> ，没有账号的话自己注册一个。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>从左侧菜单栏中找到 &lt;code>R2对象存储&lt;/code> ，点击进入 R2 管理页面&lt;/p>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--note">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>&lt;/svg>
+Note
+&lt;/div>
+&lt;p>如果没有开通 R2 服务，需要先开通服务，绑定信用卡或 PayPal，这里推荐 &lt;a class="link" href="https://bewildcard.com/i/DAK" target="_blank" rel="noopener"
+>WildCard 的虚拟信用卡&lt;/a>，可以免费申请。&lt;/p>
+&lt;/div>
+&lt;/li>
+&lt;li>
+&lt;p>点击 &lt;code>Create bucket&lt;/code> 创建存储桶。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/31e9950bac5a8ad328b2a65a93f7e549.webp"
+loading="lazy"
+alt="创建存储桶"
+>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>填写存储桶名称，选择存储桶区域，点击 &lt;code>Create&lt;/code> 创建存储桶。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/19b819d6b171f4972093beaf6cbb1d59.webp"
+loading="lazy"
+alt="创建存储桶"
+>&lt;/p>
+&lt;p>此时我们已经可以向存储桶上传文件了，可以选择在网页直接上传文件或文件夹。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>配置 S3 API，以便使用 PicGo 上传图片。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/772bee6456e9a2d12f7d160dba9c1b8b.webp"
+loading="lazy"
+alt="创建API令牌"
+>
+&lt;img src="https://img.onetool.app:/2024/12/4b14aa84b09e5706550e38a46045e987.webp"
+loading="lazy"
+alt="创建API令牌2"
+>&lt;/p>
+&lt;p>完成创建后会显示所有密钥，PicGo 配置需要，因为只会显示一次，建议在密码管理软件或其他地方妥善保管好这些参数信息。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>配置自定义域名&lt;/p>
+&lt;p>进入存储桶的设置，配置自定义域名或启用 r2.dev 域名。
+&lt;img src="https://img.onetool.app:/2024/12/a302be0ec8bab761fb51e244d64e05e0.webp"
+loading="lazy"
+alt="配置自定义域名"
+>&lt;/p>
+&lt;p>至此，我们需要在 Cloudflare R2 上配置的部分就完成了，接下来我们需要配置 PicGo 客户端。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="picgo">PicGo
+&lt;/h2>&lt;p>PicGo 是一个图片上传工具，支持多种图床。&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>下载并安装 PicGo&lt;/p>
+&lt;p>进入官方仓库 &lt;a class="link" href="https://github.com/Molunerfinn/PicGo" target="_blank" rel="noopener"
+>PicGo&lt;/a> ，下载对应平台的安装包。&lt;/p>
+&lt;p>基本操作参照官方文档即可。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>安装插件&lt;/p>
+&lt;p>Picgo 默认是不支持 S3 图床的，需要安装插件。我使用了以下插件，可视情况安装。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/4c186328b1d1a068d1becdc625fa160e.webp"
+loading="lazy"
+alt="安装插件"
+>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://github.com/wayjam/picgo-plugin-s3" target="_blank" rel="noopener"
+>picgo-plugin-s3&lt;/a>
+让 Picgo 支持 S3 图床上传&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://github.com/PicGo/picgo-plugin-pic-migrater" target="_blank" rel="noopener"
+>picgo-plugin-pic-migrater&lt;/a>
+将本地图片批量迁移到图床&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://github.com/fhyoga/picgo-plugin-watermark" target="_blank" rel="noopener"
+>picgo-plugin-watermark&lt;/a>
+为图片添加水印&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://github.com/JuZiSang/picgo-plugin-compress" target="_blank" rel="noopener"
+>picgo-plugin-compress&lt;/a>
+压缩图片&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>其他插件可查看&lt;a class="link" href="https://github.com/PicGo/Awesome-PicGo" target="_blank" rel="noopener"
+> Awesome-PicGo 插件列表&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>配置 PicGo&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>在 PicGo 中添加一个 &lt;code>Amazon S3&lt;/code> 类型的图床，将 Cloudflare R2 的配置信息填入即可。
+&lt;img src="https://img.onetool.app:/2024/12/8127ce10014c8d9af001eb6d8d59497b.webp"
+loading="lazy"
+alt="新增图床"
+>
+&lt;img src="https://img.onetool.app:/2024/12/9431a14a3a421996d6416c0d21ef5761.webp"
+loading="lazy"
+alt="图床配置"
+>&lt;/p>
+&lt;p>自定义输出模板是 &lt;code>{protocol}://img.onetool.app:{port}/{path}&lt;/code>，可以换成自己的域名，这样上传图片后，剪贴板的链接就是自定义的域名。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>其他插件配置参考对应插件文档即可，都很简单。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="截图工具">截图工具
+&lt;/h2>&lt;p>截图工具可以使用微信、QQ 等软件的截图功能，而我使用的是 &lt;a class="link" href="https://pixpin.cn/docs/" target="_blank" rel="noopener"
+>PixPin&lt;/a>，简单来说是一个截图、贴图的工具，但是 PixPin 以截图和贴图两大功能为核心做了大量的优化功能，目标是提升用户在工作时的工作效率，无论用户使用电脑做何种工作，都可以使用 PixPin 提高工作效率。&lt;/p>
+&lt;p>比如支持 GIF 录制：&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/3e61d2347fb97b22cd46dda302f031d2.gif"
+loading="lazy"
+alt="GIF录制"
+>&lt;/p>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--warning">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>&lt;/svg>
+Warning
+&lt;/div>
+&lt;p>目前使用的图片水印插件 &lt;code>watermark 1.2.1&lt;/code>，上传 GIF 图片会报错，需要禁用插件。&lt;/p>
+&lt;/div>
+&lt;p>配置好图床后，就可以顺畅的写文章啦，发布到多个平台也更加方便。&lt;/p></description></item></channel></rss>

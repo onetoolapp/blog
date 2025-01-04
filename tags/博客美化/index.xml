@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>博客美化 on OneTool 博客</title><link>https://blog.onetool.app/tags/%E5%8D%9A%E5%AE%A2%E7%BE%8E%E5%8C%96/</link><description>Recent content in 博客美化 on OneTool 博客</description><generator>Hugo -- gohugo.io</generator><language>zh-Hans</language><lastBuildDate>Thu, 19 Dec 2024 15:35:19 +0800</lastBuildDate><atom:link href="https://blog.onetool.app/tags/%E5%8D%9A%E5%AE%A2%E7%BE%8E%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>在 Hugo 中实现 GitHub 风格的 Alerts 提示框</title><link>https://blog.onetool.app/p/github-style-alert/</link><pubDate>Thu, 19 Dec 2024 15:35:19 +0800</pubDate><guid>https://blog.onetool.app/p/github-style-alert/</guid><description>&lt;img src="https://img.onetool.app:/2024/12/ee1d9f21b1ebbcf2d624d65f83047ba0.webp" alt="Featured image of post 在 Hugo 中实现 GitHub 风格的 Alerts 提示框" />&lt;h2 id="github-alerts-简介">GitHub Alerts 简介
+&lt;/h2>&lt;p>GitHub Alerts 是一种优雅的信息提示方式，可以让你在 Markdown 文档中创建醒目的提示框。通过简单的语法，你可以添加不同类型的提示框来突出显示重要信息，使文档更具可读性和层次感。&lt;/p>
+&lt;h3 id="基本语法">基本语法
+&lt;/h3>&lt;p>GitHub Alerts 的语法非常直观。只需在引用块的开头添加特定标识符即可：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-markdown" data-lang="markdown">&lt;span class="line">&lt;span class="cl">&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">Default blockquote
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">[!NOTE]
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">Highlights information that users should take into account, even when skimming.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">[!TIP]
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">Optional information to help a user be more successful.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">[!IMPORTANT]
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">Crucial information necessary for users to succeed.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">[!WARNING]
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">Critical content demanding immediate user attention due to potential risks.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">[!CAUTION]
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">Negative potential consequences of an action.
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="效果对比">效果对比
+&lt;/h3>&lt;h4 id="默认的渲染效果">默认的渲染效果：
+&lt;/h4>&lt;p>&lt;img src="https://img.onetool.app:/2024/12/cd744c6c5bd3d3514357501d3412de80.webp"
+loading="lazy"
+alt="默认 alerts 效果"
+>&lt;/p>
+&lt;h4 id="优化后的效果">优化后的效果：
+&lt;/h4>&lt;div role="blockquote" class="markdown-blockquote">
+&lt;p>Default blockquote&lt;/p>
+&lt;/div>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--note">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>&lt;/svg>
+Note
+&lt;/div>
+&lt;p>Highlights information that users should take into account, even when skimming.&lt;/p>
+&lt;/div>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--tip">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"/>&lt;/svg>
+Tip
+&lt;/div>
+&lt;p>Optional information to help a user be more successful.&lt;/p>
+&lt;/div>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--important">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>&lt;/svg>
+Important
+&lt;/div>
+&lt;p>Crucial information necessary for users to succeed.&lt;/p>
+&lt;/div>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--warning">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>&lt;/svg>
+Warning
+&lt;/div>
+&lt;p>Critical content demanding immediate user attention due to potential risks.&lt;/p>
+&lt;/div>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--caution">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M4.47.22A.749.749 0 0 1 5 0h6c.199 0 .389.079.53.22l4.25 4.25c.141.14.22.331.22.53v6a.749.749 0 0 1-.22.53l-4.25 4.25A.749.749 0 0 1 11 16H5a.749.749 0 0 1-.53-.22L.22 11.53A.749.749 0 0 1 0 11V5c0-.199.079-.389.22-.53Zm.84 1.28L1.5 5.31v5.38l3.81 3.81h5.38l3.81-3.81V5.31L10.69 1.5ZM8 4a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>&lt;/svg>
+Caution
+&lt;/div>
+&lt;p>Negative potential consequences of an action.&lt;/p>
+&lt;/div>
+&lt;h2 id="实现步骤">实现步骤
+&lt;/h2>&lt;p>根据&lt;a class="link" href="https://gohugo.io/render-hooks/blockquotes/#alerts" target="_blank" rel="noopener"
+>hugo 官方文档&lt;/a>，我们可以创建&lt;code>render hooks&lt;/code>来覆盖 markdown 转换为 HTML 的 样式。&lt;/p>
+&lt;h3 id="修改渲染模板">修改渲染模板
+&lt;/h3>&lt;p>在&lt;code>layouts/_default/_markup&lt;/code>目录下创建&lt;code>render-blockquote-alert.html&lt;/code> 和 &lt;code>render-blockquote-regular.html&lt;/code>文件，并分别添加以下代码：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>render-blockquote-regular.html&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="na">role&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;blockquote&amp;#34;&lt;/span> &lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;markdown-blockquote&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>{{ .Text }}&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>render-blockquote-alert.html&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">{{ $svgs := dict &amp;#34;caution&amp;#34; &amp;#34;stop&amp;#34; &amp;#34;important&amp;#34; &amp;#34;report&amp;#34; &amp;#34;note&amp;#34; &amp;#34;info&amp;#34; &amp;#34;tip&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;#34;light-bulb&amp;#34; &amp;#34;warning&amp;#34; &amp;#34;alert&amp;#34; }} {{ $svg := resources.GetMatch (printf
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;#34;svg/octicons/%s-16.svg&amp;#34; (index $svgs .AlertType)) }}
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">role&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;blockquote&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;markdown-alert markdown-alert--{{ .AlertType }}&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;markdown-alert__title&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> {{ $svg.Content | safeHTML }} {{ title .AlertType }}
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> {{ .Text | safeHTML }}
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;p>这里使用 div 标签，而不是使用 blockquote 标签，是为了避免主题的 CSS 选择器覆盖样式。&lt;/p>
+&lt;h3 id="修改样式">修改样式
+&lt;/h3>&lt;p>在&lt;code>assets/scss/custom.scss&lt;/code>文件中添加对应样式：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
+&lt;/span>&lt;span class="lnt">71
+&lt;/span>&lt;span class="lnt">72
+&lt;/span>&lt;span class="lnt">73
+&lt;/span>&lt;span class="lnt">74
+&lt;/span>&lt;span class="lnt">75
+&lt;/span>&lt;span class="lnt">76
+&lt;/span>&lt;span class="lnt">77
+&lt;/span>&lt;span class="lnt">78
+&lt;/span>&lt;span class="lnt">79
+&lt;/span>&lt;span class="lnt">80
+&lt;/span>&lt;span class="lnt">81
+&lt;/span>&lt;span class="lnt">82
+&lt;/span>&lt;span class="lnt">83
+&lt;/span>&lt;span class="lnt">84
+&lt;/span>&lt;span class="lnt">85
+&lt;/span>&lt;span class="lnt">86
+&lt;/span>&lt;span class="lnt">87
+&lt;/span>&lt;span class="lnt">88
+&lt;/span>&lt;span class="lnt">89
+&lt;/span>&lt;span class="lnt">90
+&lt;/span>&lt;span class="lnt">91
+&lt;/span>&lt;span class="lnt">92
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-scss" data-lang="scss">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">:root&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-done&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#622cbc&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-success&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#055d20&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-danger&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#a0111f&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-warning&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#744500&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-info&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#0349b4&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-muted&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#636c76&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-text-default&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#222&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-bg-mix&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="ni">white&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--img-shadow&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">rgba&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="mf">.1&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 亮色主题下的阴影颜色
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="na">--c-link&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#0066cc&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nd">:root&lt;/span>&lt;span class="o">[&lt;/span>&lt;span class="nt">data-scheme&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;dark&amp;#39;&lt;/span>&lt;span class="o">]&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-done&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#9d71e8&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-success&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#3fb950&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-danger&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#f85149&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-warning&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#d29922&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-info&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#58a6ff&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-muted&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#8b949e&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-text-default&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#e6edf3&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-bg-mix&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#0d1117&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--img-shadow&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">rgba&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">255&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="mi">255&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="mi">255&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="mf">.1&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 暗色主题下的阴影颜色
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="na">--c-link&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#58a6ff&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-blockquote&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">margin-bottom&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="mf">.6&lt;/span>&lt;span class="kt">rem&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">padding&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="mf">.8&lt;/span>&lt;span class="kt">rem&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="mf">.6&lt;/span>&lt;span class="kt">rem&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-left&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="kt">px&lt;/span> &lt;span class="ni">solid&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-muted&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-radius&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">6&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-blockquote&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">background-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">color-mix&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">in&lt;/span> &lt;span class="n">srgb&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-muted&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="kt">%&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-bg-mix&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">padding&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="mf">.8&lt;/span>&lt;span class="kt">rem&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="mf">.6&lt;/span>&lt;span class="kt">rem&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert--note&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-left-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-info&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-info&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">background-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">color-mix&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">in&lt;/span> &lt;span class="n">srgb&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-info&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="kt">%&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-bg-mix&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert--tip&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-left-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-success&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-success&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">background-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">color-mix&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">in&lt;/span> &lt;span class="n">srgb&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-success&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="kt">%&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-bg-mix&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert--important&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-left-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-done&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-done&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">background-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">color-mix&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">in&lt;/span> &lt;span class="n">srgb&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-done&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="kt">%&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-bg-mix&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert--warning&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-left-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-warning&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-warning&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">background-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">color-mix&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">in&lt;/span> &lt;span class="n">srgb&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-warning&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="kt">%&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-bg-mix&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert--caution&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-left-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-danger&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-danger&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">background-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">color-mix&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">in&lt;/span> &lt;span class="n">srgb&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-danger&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="kt">%&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-bg-mix&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="nt">p&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-text-default&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="nt">p&lt;/span>&lt;span class="nd">:last-child&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">margin-bottom&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert__title&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">margin-bottom&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="mf">.6&lt;/span>&lt;span class="kt">rem&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">display&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="ni">flex&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">align-items&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="ni">center&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">font-weight&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">600&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">font-size&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="mf">.6&lt;/span>&lt;span class="kt">rem&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert__title&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="nt">svg&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">fill&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="ni">currentColor&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">margin-right&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="mf">.8&lt;/span>&lt;span class="kt">rem&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">display&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="ni">block&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="添加-svg-图标">添加 svg 图标
+&lt;/h3>&lt;p>在&lt;code>assets/svg/octicons&lt;/code>目录下创建对应的 svg 图标，你可以直接保存以下图标到本地：&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/685a95e5e85da98de61c53b51c112c3d.svg"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/24baa055c1ae18761fbb3abf8dab593a.svg"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/842e7d5986b3e7378d502413af7e9f53.svg"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/536721bc3d4acb9859dd7441688f9544.svg"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/dcac645092fe2c0cbbc31c5b6e0b3242.svg"
+loading="lazy"
+>&lt;/p>
+&lt;p>这样就可以显示好看的 alerts 样式了。&lt;/p></description></item></channel></rss>

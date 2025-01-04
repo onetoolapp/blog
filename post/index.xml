@@ -1,0 +1,1105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on OneTool 博客</title><link>https://blog.onetool.app/post/</link><description>Recent content in Posts on OneTool 博客</description><generator>Hugo -- gohugo.io</generator><language>zh-Hans</language><lastBuildDate>Fri, 03 Jan 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.onetool.app/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Python Scrapy 爬虫框架入门</title><link>https://blog.onetool.app/p/python-scrapy/</link><pubDate>Fri, 03 Jan 2025 00:00:00 +0000</pubDate><guid>https://blog.onetool.app/p/python-scrapy/</guid><description>&lt;img src="https://img.onetool.app:/2025/01/7fa669a05dd1bc5994299f069558f30d.webp" alt="Featured image of post Python Scrapy 爬虫框架入门" />&lt;h2 id="简介">简介
+&lt;/h2>&lt;p>&lt;a class="link" href="https://github.com/scrapy/scrapy" target="_blank" rel="noopener"
+>Scrapy&lt;/a> 是一个快速的高级网页爬取和网页抓取框架，用于爬取网站并从其页面中提取结构化数据。它可以用于广泛的用途，从数据挖掘到监控和自动化测试。&lt;/p>
+&lt;p>本文记录 Python 环境搭建和 Scrapy 爬虫框架的基本使用方法。&lt;/p>
+&lt;h2 id="环境">环境
+&lt;/h2>&lt;p>项目使用 &lt;a class="link" href="https://python-poetry.org/" target="_blank" rel="noopener"
+>Poetry&lt;/a> 进行包管理。&lt;/p>
+&lt;p>Poetry 是一个现代化的 Python 包管理工具，用于管理 Python 项目的依赖关系。&lt;/p>
+&lt;p>参照官方文档安装即可&lt;/p>
+&lt;h2 id="创建项目">创建项目
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 创建项目&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">poetry new scrapy-demo
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 进入项目目录&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">cd&lt;/span> scrapy-demo
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 安装依赖&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">poetry add scrapy
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 进入虚拟环境&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">poetry shell
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--tip">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"/>&lt;/svg>
+Tip
+&lt;/div>
+&lt;p>按照官方建议，可以指定项目为&lt;a class="link" href="https://python-poetry.org/docs/main/basic-usage/#operating-modes" target="_blank" rel="noopener"
+>非 package 模式&lt;/a>&lt;/p>
+&lt;/div>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-toml" data-lang="toml">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 指定非package模式&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="nx">tool&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">poetry&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">package-mode&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="基本使用">基本使用
+&lt;/h2>&lt;p>主要根据&lt;a class="link" href="https://docs.scrapy.org/en/latest/intro/tutorial.html#" target="_blank" rel="noopener"
+>官方教程&lt;/a>，了解基本使用方式&lt;/p>
+&lt;h3 id="创建爬虫项目">创建爬虫项目
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">scrapy startproject tutorial
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="第一个爬虫">第一个爬虫
+&lt;/h3>&lt;p>在&lt;code>tutorial/tutorial/spiders/&lt;/code>目录下创建&lt;code>quotes_spider.py&lt;/code>文件，内容如下：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">pathlib&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">Path&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">scrapy&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">QuotesSpider&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">scrapy&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Spider&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;quotes&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="nf">start_requests&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">urls&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;https://quotes.toscrape.com/page/1/&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;https://quotes.toscrape.com/page/2/&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="n">url&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">urls&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">yield&lt;/span> &lt;span class="n">scrapy&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Request&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">url&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">url&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">callback&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">parse&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="nf">parse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">page&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">url&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;/&amp;#34;&lt;/span>&lt;span class="p">)[&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">filename&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;quotes-&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">.html&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Path&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">filename&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">write_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">body&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;Saved file &lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">filename&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="运行爬虫">运行爬虫
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">cd&lt;/span> tutorial
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 运行爬虫&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">scrapy crawl quotes
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="总结">总结
+&lt;/h2>&lt;p>可以看到 将页面保存成了 html 文件，更多的使用方式参考&lt;a class="link" href="https://docs.scrapy.org/en/latest/intro/tutorial.html" target="_blank" rel="noopener"
+>官方文档&lt;/a>。&lt;/p></description></item><item><title>8元套餐+大流量卡，从此流量不再愁</title><link>https://blog.onetool.app/p/large-data-card/</link><pubDate>Mon, 23 Dec 2024 00:00:00 +0000</pubDate><guid>https://blog.onetool.app/p/large-data-card/</guid><description>&lt;img src="https://img.onetool.app:/2024/12/1a9ca3075f9ade3a673f8a1341b4771f.webp" alt="Featured image of post 8元套餐+大流量卡，从此流量不再愁" />&lt;p>你是否经常遇到这样的困扰：每月交着几十块的套餐费，流量还是不够用？想换套餐，却发现更便宜的套餐根本找不到？别着急，今天就教大家一个省钱妙招 —— &lt;strong>8 元套餐+大流量卡&lt;/strong>的完美组合！&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/46698de63ff5adae259c981c27dc239f.webp"
+loading="lazy"
+alt="流量不足"
+>&lt;/p>
+&lt;p>查找一番后，决定使用&lt;strong>8 元套餐+大流量卡&lt;/strong>搭配使用，不再为流量不足而烦恼，具体方法在这里分享给大家。&lt;/p>
+&lt;h2 id="更换移动-8-元套餐">更换移动 8 元套餐
+&lt;/h2>&lt;p>移动用户可以按以下步骤操作（其他运营商可以尝试类似方法）：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>打开移动 APP，依次点击&lt;strong>我的&lt;/strong> → &lt;strong>客服&lt;/strong> → &lt;strong>在线客服&lt;/strong>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/918a809c6a20918e94fce1f9569b95b2.webp"
+loading="lazy"
+alt="打开客服"
+>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>直接发送&lt;code>申请8元套餐&lt;/code>，然后点击&lt;code>预约登记更换套餐&lt;/code>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/df46c96b5f774e318813eed83b8c0cbd.webp"
+loading="lazy"
+alt="套餐变更"
+>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>填写预约信息时要注意：&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;ul>
+&lt;li>
+&lt;p>套餐选项中虽然没有 8 元套餐，随便选择一个即可&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>重点是在&lt;strong>其他套餐内容需求&lt;/strong>中明确写明：&lt;code>申请更换8元套餐&lt;/code>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/5237e2ab71411156114caf28e7fc3b4e.webp"
+loading="lazy"
+alt="填写信息"
+>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;ol start="4">
+&lt;li>
+&lt;p>等待客服回电，明确表达想要更换 8 元套餐的意愿&lt;/p>
+&lt;div role="blockquote" class="markdown-blockquote">
+&lt;p>💡8 元套餐有两个版本可选&lt;/p>
+&lt;ul>
+&lt;li>100M 流量版&lt;/li>
+&lt;li>30 分钟通话版&lt;/li>
+&lt;/ul>
+&lt;/div>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--warning">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>&lt;/svg>
+Warning
+&lt;/div>
+&lt;p>超出套餐是会额外收费的，建议套餐生效后，关闭 SIM 的流量。&lt;/p>
+&lt;/div>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="搭配大流量卡">搭配大流量卡
+&lt;/h2>&lt;p>想要获得大流量卡，有两个选择：&lt;/p>
+&lt;h3 id="方案一直接领取">方案一：直接领取
+&lt;/h3>&lt;p>扫描下方二维码，免费申请大流量卡：&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/cda0bce3fc77e212abde1f76a798b8fd.webp"
+loading="lazy"
+alt="免费领大流量卡"
+>&lt;/p>
+&lt;h3 id="方案二成为代理商">方案二：成为代理商
+&lt;/h3>&lt;p>为什么要选择成为代理商？&lt;/p>
+&lt;ul>
+&lt;li>自己办理可以获得佣金返现（约 100 元/张）&lt;/li>
+&lt;li>可以推荐给亲朋好友赚取额外收入&lt;/li>
+&lt;li>可以通过网络营销获得被动收入&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/fd0c9f83e91aad5b37bfadc672cdf5ab.webp"
+loading="lazy"
+alt="佣金"
+>&lt;/p>
+&lt;p>&lt;a class="link" href="https://haoka.lot-ml.com/plugreg.html?agentid=924955" target="_blank" rel="noopener"
+>立即注册&lt;/a>&lt;/p>
+&lt;p>注册后，后台可以看到每张卡的返佣，一张卡都有 100 块左右，可以自己申领，也可以推荐给身边朋友，网上宣传，来赚取佣金。&lt;/p></description></item><item><title>在 Hugo 中实现 GitHub 风格的 Alerts 提示框</title><link>https://blog.onetool.app/p/github-style-alert/</link><pubDate>Thu, 19 Dec 2024 15:35:19 +0800</pubDate><guid>https://blog.onetool.app/p/github-style-alert/</guid><description>&lt;img src="https://img.onetool.app:/2024/12/ee1d9f21b1ebbcf2d624d65f83047ba0.webp" alt="Featured image of post 在 Hugo 中实现 GitHub 风格的 Alerts 提示框" />&lt;h2 id="github-alerts-简介">GitHub Alerts 简介
+&lt;/h2>&lt;p>GitHub Alerts 是一种优雅的信息提示方式，可以让你在 Markdown 文档中创建醒目的提示框。通过简单的语法，你可以添加不同类型的提示框来突出显示重要信息，使文档更具可读性和层次感。&lt;/p>
+&lt;h3 id="基本语法">基本语法
+&lt;/h3>&lt;p>GitHub Alerts 的语法非常直观。只需在引用块的开头添加特定标识符即可：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-markdown" data-lang="markdown">&lt;span class="line">&lt;span class="cl">&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">Default blockquote
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">[!NOTE]
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">Highlights information that users should take into account, even when skimming.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">[!TIP]
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">Optional information to help a user be more successful.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">[!IMPORTANT]
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">Crucial information necessary for users to succeed.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">[!WARNING]
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">Critical content demanding immediate user attention due to potential risks.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">[!CAUTION]
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="ge">&lt;/span>&lt;span class="k">&amp;gt; &lt;/span>&lt;span class="ge">Negative potential consequences of an action.
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="效果对比">效果对比
+&lt;/h3>&lt;h4 id="默认的渲染效果">默认的渲染效果：
+&lt;/h4>&lt;p>&lt;img src="https://img.onetool.app:/2024/12/cd744c6c5bd3d3514357501d3412de80.webp"
+loading="lazy"
+alt="默认 alerts 效果"
+>&lt;/p>
+&lt;h4 id="优化后的效果">优化后的效果：
+&lt;/h4>&lt;div role="blockquote" class="markdown-blockquote">
+&lt;p>Default blockquote&lt;/p>
+&lt;/div>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--note">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>&lt;/svg>
+Note
+&lt;/div>
+&lt;p>Highlights information that users should take into account, even when skimming.&lt;/p>
+&lt;/div>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--tip">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"/>&lt;/svg>
+Tip
+&lt;/div>
+&lt;p>Optional information to help a user be more successful.&lt;/p>
+&lt;/div>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--important">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>&lt;/svg>
+Important
+&lt;/div>
+&lt;p>Crucial information necessary for users to succeed.&lt;/p>
+&lt;/div>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--warning">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>&lt;/svg>
+Warning
+&lt;/div>
+&lt;p>Critical content demanding immediate user attention due to potential risks.&lt;/p>
+&lt;/div>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--caution">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M4.47.22A.749.749 0 0 1 5 0h6c.199 0 .389.079.53.22l4.25 4.25c.141.14.22.331.22.53v6a.749.749 0 0 1-.22.53l-4.25 4.25A.749.749 0 0 1 11 16H5a.749.749 0 0 1-.53-.22L.22 11.53A.749.749 0 0 1 0 11V5c0-.199.079-.389.22-.53Zm.84 1.28L1.5 5.31v5.38l3.81 3.81h5.38l3.81-3.81V5.31L10.69 1.5ZM8 4a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>&lt;/svg>
+Caution
+&lt;/div>
+&lt;p>Negative potential consequences of an action.&lt;/p>
+&lt;/div>
+&lt;h2 id="实现步骤">实现步骤
+&lt;/h2>&lt;p>根据&lt;a class="link" href="https://gohugo.io/render-hooks/blockquotes/#alerts" target="_blank" rel="noopener"
+>hugo 官方文档&lt;/a>，我们可以创建&lt;code>render hooks&lt;/code>来覆盖 markdown 转换为 HTML 的 样式。&lt;/p>
+&lt;h3 id="修改渲染模板">修改渲染模板
+&lt;/h3>&lt;p>在&lt;code>layouts/_default/_markup&lt;/code>目录下创建&lt;code>render-blockquote-alert.html&lt;/code> 和 &lt;code>render-blockquote-regular.html&lt;/code>文件，并分别添加以下代码：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>render-blockquote-regular.html&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="na">role&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;blockquote&amp;#34;&lt;/span> &lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;markdown-blockquote&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>{{ .Text }}&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>render-blockquote-alert.html&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">{{ $svgs := dict &amp;#34;caution&amp;#34; &amp;#34;stop&amp;#34; &amp;#34;important&amp;#34; &amp;#34;report&amp;#34; &amp;#34;note&amp;#34; &amp;#34;info&amp;#34; &amp;#34;tip&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;#34;light-bulb&amp;#34; &amp;#34;warning&amp;#34; &amp;#34;alert&amp;#34; }} {{ $svg := resources.GetMatch (printf
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;#34;svg/octicons/%s-16.svg&amp;#34; (index $svgs .AlertType)) }}
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">role&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;blockquote&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;markdown-alert markdown-alert--{{ .AlertType }}&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;markdown-alert__title&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> {{ $svg.Content | safeHTML }} {{ title .AlertType }}
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> {{ .Text | safeHTML }}
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;p>这里使用 div 标签，而不是使用 blockquote 标签，是为了避免主题的 CSS 选择器覆盖样式。&lt;/p>
+&lt;h3 id="修改样式">修改样式
+&lt;/h3>&lt;p>在&lt;code>assets/scss/custom.scss&lt;/code>文件中添加对应样式：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
+&lt;/span>&lt;span class="lnt">71
+&lt;/span>&lt;span class="lnt">72
+&lt;/span>&lt;span class="lnt">73
+&lt;/span>&lt;span class="lnt">74
+&lt;/span>&lt;span class="lnt">75
+&lt;/span>&lt;span class="lnt">76
+&lt;/span>&lt;span class="lnt">77
+&lt;/span>&lt;span class="lnt">78
+&lt;/span>&lt;span class="lnt">79
+&lt;/span>&lt;span class="lnt">80
+&lt;/span>&lt;span class="lnt">81
+&lt;/span>&lt;span class="lnt">82
+&lt;/span>&lt;span class="lnt">83
+&lt;/span>&lt;span class="lnt">84
+&lt;/span>&lt;span class="lnt">85
+&lt;/span>&lt;span class="lnt">86
+&lt;/span>&lt;span class="lnt">87
+&lt;/span>&lt;span class="lnt">88
+&lt;/span>&lt;span class="lnt">89
+&lt;/span>&lt;span class="lnt">90
+&lt;/span>&lt;span class="lnt">91
+&lt;/span>&lt;span class="lnt">92
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-scss" data-lang="scss">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">:root&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-done&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#622cbc&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-success&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#055d20&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-danger&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#a0111f&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-warning&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#744500&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-info&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#0349b4&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-muted&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#636c76&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-text-default&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#222&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-bg-mix&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="ni">white&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--img-shadow&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">rgba&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="mf">.1&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 亮色主题下的阴影颜色
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="na">--c-link&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#0066cc&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nd">:root&lt;/span>&lt;span class="o">[&lt;/span>&lt;span class="nt">data-scheme&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;dark&amp;#39;&lt;/span>&lt;span class="o">]&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-done&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#9d71e8&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-success&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#3fb950&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-danger&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#f85149&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-warning&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#d29922&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-info&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#58a6ff&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-muted&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#8b949e&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-text-default&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#e6edf3&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--c-bg-mix&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#0d1117&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">--img-shadow&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">rgba&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">255&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="mi">255&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="mi">255&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="mf">.1&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 暗色主题下的阴影颜色
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="na">--c-link&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mh">#58a6ff&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-blockquote&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">margin-bottom&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="mf">.6&lt;/span>&lt;span class="kt">rem&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">padding&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="mf">.8&lt;/span>&lt;span class="kt">rem&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="mf">.6&lt;/span>&lt;span class="kt">rem&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-left&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="kt">px&lt;/span> &lt;span class="ni">solid&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-muted&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-radius&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">6&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-blockquote&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">background-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">color-mix&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">in&lt;/span> &lt;span class="n">srgb&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-muted&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="kt">%&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-bg-mix&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">padding&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="mf">.8&lt;/span>&lt;span class="kt">rem&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="mf">.6&lt;/span>&lt;span class="kt">rem&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert--note&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-left-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-info&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-info&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">background-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">color-mix&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">in&lt;/span> &lt;span class="n">srgb&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-info&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="kt">%&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-bg-mix&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert--tip&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-left-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-success&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-success&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">background-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">color-mix&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">in&lt;/span> &lt;span class="n">srgb&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-success&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="kt">%&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-bg-mix&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert--important&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-left-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-done&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-done&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">background-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">color-mix&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">in&lt;/span> &lt;span class="n">srgb&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-done&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="kt">%&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-bg-mix&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert--warning&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-left-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-warning&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-warning&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">background-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">color-mix&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">in&lt;/span> &lt;span class="n">srgb&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-warning&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="kt">%&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-bg-mix&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert--caution&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">border-left-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-danger&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-danger&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">background-color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">color-mix&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">in&lt;/span> &lt;span class="n">srgb&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-danger&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="kt">%&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-bg-mix&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="nt">p&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">color&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nf">var&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">--&lt;/span>&lt;span class="n">c-text-default&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="nt">p&lt;/span>&lt;span class="nd">:last-child&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">margin-bottom&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert__title&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">margin-bottom&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="mf">.6&lt;/span>&lt;span class="kt">rem&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">display&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="ni">flex&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">align-items&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="ni">center&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">font-weight&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">600&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">font-size&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="mf">.6&lt;/span>&lt;span class="kt">rem&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nc">.markdown-alert__title&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="nt">svg&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">fill&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="ni">currentColor&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">margin-right&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="mf">.8&lt;/span>&lt;span class="kt">rem&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">display&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="ni">block&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="添加-svg-图标">添加 svg 图标
+&lt;/h3>&lt;p>在&lt;code>assets/svg/octicons&lt;/code>目录下创建对应的 svg 图标，你可以直接保存以下图标到本地：&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/685a95e5e85da98de61c53b51c112c3d.svg"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/24baa055c1ae18761fbb3abf8dab593a.svg"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/842e7d5986b3e7378d502413af7e9f53.svg"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/536721bc3d4acb9859dd7441688f9544.svg"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/dcac645092fe2c0cbbc31c5b6e0b3242.svg"
+loading="lazy"
+>&lt;/p>
+&lt;p>这样就可以显示好看的 alerts 样式了。&lt;/p></description></item><item><title>白嫖Cloudflare，搭建免费图床</title><link>https://blog.onetool.app/p/image-hosting/</link><pubDate>Wed, 18 Dec 2024 15:35:19 +0800</pubDate><guid>https://blog.onetool.app/p/image-hosting/</guid><description>&lt;img src="https://img.onetool.app:/2024/12/c13ba8845062277801d1a8a6931af1c1.webp" alt="Featured image of post 白嫖Cloudflare，搭建免费图床" />&lt;p>图床是一个专门用来存储和管理图片的服务器或服务。通过图床，我们可以将图片上传到网络上，并生成一个可以访问的链接。这样在写博客、发帖或者其他需要使用图片的场景中，只需要引用图片链接即可，而不需要将图片嵌入到文章中。&lt;/p>
+&lt;p>在这篇文章中，我将介绍如何使用 Cloudflare 的 R2 服务搭建一个免费的图床，并且搭配 PicGo 工具快速上传图片。&lt;/p>
+&lt;h2 id="cloudflare-r2">Cloudflare R2
+&lt;/h2>&lt;p>&lt;a class="link" href="https://developers.cloudflare.com/r2/" target="_blank" rel="noopener"
+>Cloudflare R2 对象存储&lt;/a> 允许开发人员存储大量非结构化数据，而无需支付与典型云存储服务相关的昂贵的出口带宽费用，并且有 10G 的免费存储额度，对于个人博客来说足够使用了。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/b3048be3504614cdec08a761acb2af4c.webp"
+loading="lazy"
+alt="免费额度"
+>&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.cloudflare.com/zh-cn/" target="_blank" rel="noopener"
+>登录 Cloudflare &lt;/a> ，没有账号的话自己注册一个。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>从左侧菜单栏中找到 &lt;code>R2对象存储&lt;/code> ，点击进入 R2 管理页面&lt;/p>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--note">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>&lt;/svg>
+Note
+&lt;/div>
+&lt;p>如果没有开通 R2 服务，需要先开通服务，绑定信用卡或 PayPal，这里推荐 &lt;a class="link" href="https://bewildcard.com/i/DAK" target="_blank" rel="noopener"
+>WildCard 的虚拟信用卡&lt;/a>，可以免费申请。&lt;/p>
+&lt;/div>
+&lt;/li>
+&lt;li>
+&lt;p>点击 &lt;code>Create bucket&lt;/code> 创建存储桶。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/31e9950bac5a8ad328b2a65a93f7e549.webp"
+loading="lazy"
+alt="创建存储桶"
+>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>填写存储桶名称，选择存储桶区域，点击 &lt;code>Create&lt;/code> 创建存储桶。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/19b819d6b171f4972093beaf6cbb1d59.webp"
+loading="lazy"
+alt="创建存储桶"
+>&lt;/p>
+&lt;p>此时我们已经可以向存储桶上传文件了，可以选择在网页直接上传文件或文件夹。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>配置 S3 API，以便使用 PicGo 上传图片。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/772bee6456e9a2d12f7d160dba9c1b8b.webp"
+loading="lazy"
+alt="创建API令牌"
+>
+&lt;img src="https://img.onetool.app:/2024/12/4b14aa84b09e5706550e38a46045e987.webp"
+loading="lazy"
+alt="创建API令牌2"
+>&lt;/p>
+&lt;p>完成创建后会显示所有密钥，PicGo 配置需要，因为只会显示一次，建议在密码管理软件或其他地方妥善保管好这些参数信息。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>配置自定义域名&lt;/p>
+&lt;p>进入存储桶的设置，配置自定义域名或启用 r2.dev 域名。
+&lt;img src="https://img.onetool.app:/2024/12/a302be0ec8bab761fb51e244d64e05e0.webp"
+loading="lazy"
+alt="配置自定义域名"
+>&lt;/p>
+&lt;p>至此，我们需要在 Cloudflare R2 上配置的部分就完成了，接下来我们需要配置 PicGo 客户端。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="picgo">PicGo
+&lt;/h2>&lt;p>PicGo 是一个图片上传工具，支持多种图床。&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>下载并安装 PicGo&lt;/p>
+&lt;p>进入官方仓库 &lt;a class="link" href="https://github.com/Molunerfinn/PicGo" target="_blank" rel="noopener"
+>PicGo&lt;/a> ，下载对应平台的安装包。&lt;/p>
+&lt;p>基本操作参照官方文档即可。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>安装插件&lt;/p>
+&lt;p>Picgo 默认是不支持 S3 图床的，需要安装插件。我使用了以下插件，可视情况安装。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/4c186328b1d1a068d1becdc625fa160e.webp"
+loading="lazy"
+alt="安装插件"
+>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://github.com/wayjam/picgo-plugin-s3" target="_blank" rel="noopener"
+>picgo-plugin-s3&lt;/a>
+让 Picgo 支持 S3 图床上传&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://github.com/PicGo/picgo-plugin-pic-migrater" target="_blank" rel="noopener"
+>picgo-plugin-pic-migrater&lt;/a>
+将本地图片批量迁移到图床&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://github.com/fhyoga/picgo-plugin-watermark" target="_blank" rel="noopener"
+>picgo-plugin-watermark&lt;/a>
+为图片添加水印&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://github.com/JuZiSang/picgo-plugin-compress" target="_blank" rel="noopener"
+>picgo-plugin-compress&lt;/a>
+压缩图片&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>其他插件可查看&lt;a class="link" href="https://github.com/PicGo/Awesome-PicGo" target="_blank" rel="noopener"
+> Awesome-PicGo 插件列表&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>配置 PicGo&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>在 PicGo 中添加一个 &lt;code>Amazon S3&lt;/code> 类型的图床，将 Cloudflare R2 的配置信息填入即可。
+&lt;img src="https://img.onetool.app:/2024/12/8127ce10014c8d9af001eb6d8d59497b.webp"
+loading="lazy"
+alt="新增图床"
+>
+&lt;img src="https://img.onetool.app:/2024/12/9431a14a3a421996d6416c0d21ef5761.webp"
+loading="lazy"
+alt="图床配置"
+>&lt;/p>
+&lt;p>自定义输出模板是 &lt;code>{protocol}://img.onetool.app:{port}/{path}&lt;/code>，可以换成自己的域名，这样上传图片后，剪贴板的链接就是自定义的域名。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>其他插件配置参考对应插件文档即可，都很简单。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="截图工具">截图工具
+&lt;/h2>&lt;p>截图工具可以使用微信、QQ 等软件的截图功能，而我使用的是 &lt;a class="link" href="https://pixpin.cn/docs/" target="_blank" rel="noopener"
+>PixPin&lt;/a>，简单来说是一个截图、贴图的工具，但是 PixPin 以截图和贴图两大功能为核心做了大量的优化功能，目标是提升用户在工作时的工作效率，无论用户使用电脑做何种工作，都可以使用 PixPin 提高工作效率。&lt;/p>
+&lt;p>比如支持 GIF 录制：&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/3e61d2347fb97b22cd46dda302f031d2.gif"
+loading="lazy"
+alt="GIF录制"
+>&lt;/p>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--warning">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>&lt;/svg>
+Warning
+&lt;/div>
+&lt;p>目前使用的图片水印插件 &lt;code>watermark 1.2.1&lt;/code>，上传 GIF 图片会报错，需要禁用插件。&lt;/p>
+&lt;/div>
+&lt;p>配置好图床后，就可以顺畅的写文章啦，发布到多个平台也更加方便。&lt;/p></description></item><item><title>记录一下使用 Hugo 搭建个人博客</title><link>https://blog.onetool.app/p/create-blog/</link><pubDate>Wed, 18 Dec 2024 15:35:19 +0800</pubDate><guid>https://blog.onetool.app/p/create-blog/</guid><description>&lt;img src="https://img.onetool.app:/2024/12/fd60eec47780a43dd3502b3810474a7c.webp" alt="Featured image of post 记录一下使用 Hugo 搭建个人博客" />&lt;p>在当今信息爆炸的时代，我决定创建这个个人博客来沉淀自己的思考和经验。一方面，写博客能帮助我更系统地整理知识，将零散的想法形成完整的体系；另一方面，也希望通过分享，能与志同道合的朋友交流学习，共同进步。&lt;/p>
+&lt;p>虽然现在已经有很多现成的博客平台，但我选择从零开始搭建，既是为了获得更大的自由度和可定制性，也是一次学习和实践的机会。在这篇文章中，我将记录整个博客的搭建过程，希望能对有类似想法的朋友有所帮助。&lt;/p>
+&lt;h2 id="说明">说明
+&lt;/h2>&lt;ul>
+&lt;li>
+&lt;p>本博客使用的是 hugo 的 &lt;a class="link" href="https://stack.jimmycai.com/" target="_blank" rel="noopener"
+>Stack 主题&lt;/a>，该主题提供了一个&lt;a class="link" href="https://github.com/CaiJimmy/hugo-theme-stack-starter" target="_blank" rel="noopener"
+>快速启动模板&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>部署在 github pages 上，使用 github action 自动部署。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="环境安装">环境安装
+&lt;/h2>&lt;p>在 Windows 中，hugo 的安装很简单，只需要按照&lt;a class="link" href="https://gohugo.io/installation/windows/" target="_blank" rel="noopener"
+>官方文档的步骤&lt;/a>进行即可。&lt;/p>
+&lt;h3 id="安装必备软件">安装必备软件:
+&lt;/h3>&lt;ul>
+&lt;li>&lt;a class="link" href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git" target="_blank" rel="noopener"
+>安装 Git&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://go.dev/doc/install" target="_blank" rel="noopener"
+>安装 GO&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://gohugo.io/hugo-pipes/transpile-sass-to-css/#dart-sass" target="_blank" rel="noopener"
+>安装 Dart Sass&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h3 id="安装-hugo">安装 hugo
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">choco install hugo-extended
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 验证安装&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hugo version
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果成功打印出 hugo 的版本号，则说明安装成功。可以根据&lt;a class="link" href="https://gohugo.io/getting-started/quick-start/" target="_blank" rel="noopener"
+>官方快速开始教程&lt;/a>尝试创建一个博客。&lt;/p>
+&lt;h2 id="安装部署">安装部署
+&lt;/h2>&lt;p>一种方式是根据 &lt;a class="link" href="https://github.com/CaiJimmy/hugo-theme-stack-starter" target="_blank" rel="noopener"
+>Stack 主题的快速启动模板&lt;/a> 的步骤创建部署，非常简单。&lt;/p>
+&lt;p>如果你想将源码放在私有仓库上，通过 github action 将编译后的代码部署到另一个公开仓库，可以参考以下步骤。&lt;/p>
+&lt;h3 id="创建仓库">创建仓库
+&lt;/h3>&lt;p>首先要在 github 上创建两个仓库：
+&lt;img src="https://img.onetool.app:/2024/12/df1f946b9bb16c9d7dba486bd1e39e71.webp"
+loading="lazy"
+alt="创建仓库"
+>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>test-blog-private&lt;/strong> 用于存放源码&lt;/li>
+&lt;li>&lt;strong>onetoolapp.github.io&lt;/strong> 用于存放编译后的代码&lt;/li>
+&lt;/ul>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--tip">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"/>&lt;/svg>
+Tip
+&lt;/div>
+&lt;p>如果你要使用 github 的免费域名，公开的仓库必须命名为 &lt;code>&amp;lt;username&amp;gt;.github.io&lt;/code> 。username 是你的 github 用户名。有自己域名的话，可以随意命名。&lt;/p>
+&lt;/div>
+&lt;h3 id="上传代码">上传代码
+&lt;/h3>&lt;p>先将主题代码 clone 到本地&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">git clone https://github.com/CaiJimmy/hugo-theme-stack-starter.git
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>修改远程仓库地址&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">git remote set-url origin https://github.com/onetoolapp/test-blog-private.git
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看远程仓库地址&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git remote -v
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 推送代码&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>推送完成后，可以看到仓库有两个分支，分别是 &lt;code>main&lt;/code> 和 &lt;code>gh-pages&lt;/code>。但这是一个私有仓库，如果想要启用 github pages，必须是 GitHub Pro 账户，或者将仓库公开。
+&lt;img src="https://img.onetool.app:/2024/12/40e63ef44bc41c0ad4b2abc0a8708468.webp"
+loading="lazy"
+alt="github pages"
+>
+接下来，我们修改一下配置，让 github action 将编译后的代码部署到另一个公开仓库。&lt;/p>
+&lt;h3 id="修改配置">修改配置
+&lt;/h3>&lt;p>网站是通过 github action 部署的，先来看一下部署配置。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># .github/workflows/deploy.yml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="l">// ...&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy 🚀&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">JamesIves/github-pages-deploy-action@v4&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">branch&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">gh-pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">folder&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">public&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">clean&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">single-commit&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>查看这个&lt;a class="link" href="https://github.com/JamesIves/github-pages-deploy-action" target="_blank" rel="noopener"
+>github-pages-deploy-action 的文档&lt;/a> 的文档，可以看到如何配置推送到另一个仓库。&lt;/p>
+&lt;p>将部署相关配置进行如下修改：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="hl">&lt;span class="lnt">52
+&lt;/span>&lt;/span>&lt;span class="hl">&lt;span class="lnt">53
+&lt;/span>&lt;/span>&lt;span class="hl">&lt;span class="lnt">54
+&lt;/span>&lt;/span>&lt;span class="hl">&lt;span class="lnt">55
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="l">// ...&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy 🚀&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">JamesIves/github-pages-deploy-action@v4&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">branch&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">gh-pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">folder&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">public&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">clean&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">single-commit&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line hl">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># 目标仓库名，GitHub用户名/目标仓库名&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line hl">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">repository-name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">onetoolapp/onetoolapp.github.io&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line hl">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># 能够访问目标仓库的 PAT token&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line hl">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">token&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.TEST_BLOG_DEPLOY_TOKEN }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>PAT token，是 github 的 personal access token，用于授权 github action 访问目标仓库。接来下需要创建并配置这个密钥。&lt;/p>
+&lt;h3 id="创建并设置-pat-token">创建并设置 PAT token
+&lt;/h3>&lt;p>在 github 上，点击右上角的头像，选择 &lt;code>Settings&lt;/code>，然后选择 &lt;code>Developer settings&lt;/code>，再选择 &lt;code>Personal access tokens&lt;/code>，点击 &lt;code>Generate new token&lt;/code>。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/1b4eaf57138752577773edf1024d3930.webp"
+loading="lazy"
+alt="创建一个新的token"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/037164db4dfffec032be1cef75f5c165.webp"
+loading="lazy"
+alt="设置名称"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/eaddb810061c75533fa73be7d54a170d.webp"
+loading="lazy"
+alt="选择有效期"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/137cc498c2cb4dac77757d37b0becfbb.webp"
+loading="lazy"
+alt="选择可访问的仓库"
+>&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/e86ef209c9755a8d34c03b8b3356a53c.webp"
+loading="lazy"
+alt="设置仓库权限"
+>&lt;/p>
+&lt;p>然后点击 &lt;code>Generate token&lt;/code>，将生成的 token 复制保存下来。&lt;/p>
+&lt;p>接下来来到私有仓库 &lt;code>test-blog-private&lt;/code> 的 &lt;code>Settings&lt;/code> 页面，选择 &lt;code>Secrets and variables&lt;/code>，然后选择 &lt;code>Actions&lt;/code>，点击 &lt;code>New repository secret&lt;/code>。&lt;/p>
+&lt;p>&lt;img src="https://img.onetool.app:/2024/12/f94aee16ae3ca81a5599982ab44919d9.webp"
+loading="lazy"
+alt="配置 actions密钥"
+>&lt;/p>
+&lt;p>配置后，重新提交代码，稍等片刻，可以看到 github action 执行成功了。编译后的代码也自动发布在公开仓库。
+&lt;img src="https://img.onetool.app:/2024/12/ce11cb751197c5ceded7613b274096e8.webp"
+loading="lazy"
+alt="github action 执行成功"
+>
+&lt;img src="https://img.onetool.app:/2024/12/801f23d39ba9016f32d0b1fae87cedc0.webp"
+loading="lazy"
+alt="编译后的代码"
+>&lt;/p>
+&lt;h2 id="安装完成">安装完成
+&lt;/h2>&lt;p>访问 &lt;code>https://onetoolapp.github.io&lt;/code> ，可以看到博客已经成功部署了。
+&lt;img src="https://img.onetool.app:/2024/12/48a4b5b7619506104044d58252937db2.webp"
+loading="lazy"
+alt="alt text"
+>&lt;/p>
+&lt;div role="blockquote" class="markdown-alert markdown-alert--note">
+&lt;div class="markdown-alert__title">
+&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">&lt;path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>&lt;/svg>
+Note
+&lt;/div>
+&lt;p>本地址将作为示例，可以直接访问&lt;/p>
+&lt;/div>
+&lt;p>接下来，可以参考官方文档和主题文档，进行一些个性化配置，然后开始写文章发布啦。&lt;/p></description></item><item><title>Markdown语法指南</title><link>https://blog.onetool.app/p/markdown-syntax/</link><pubDate>Thu, 07 Sep 2023 00:00:00 +0000</pubDate><guid>https://blog.onetool.app/p/markdown-syntax/</guid><description>&lt;img src="https://img.onetool.app:/2024/12/8e790dc5fbc0895743432c933c776ed5.webp" alt="Featured image of post Markdown语法指南" />&lt;p>This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p>
+&lt;h2 id="headings">Headings
+&lt;/h2>&lt;p>The following HTML &lt;code>&amp;lt;h1&amp;gt;&lt;/code>—&lt;code>&amp;lt;h6&amp;gt;&lt;/code> elements represent six levels of section headings. &lt;code>&amp;lt;h1&amp;gt;&lt;/code> is the highest section level while &lt;code>&amp;lt;h6&amp;gt;&lt;/code> is the lowest.&lt;/p>
+&lt;h1 id="h1">H1
+&lt;/h1>&lt;h2 id="h2">H2
+&lt;/h2>&lt;h3 id="h3">H3
+&lt;/h3>&lt;h4 id="h4">H4
+&lt;/h4>&lt;h5 id="h5">H5
+&lt;/h5>&lt;h6 id="h6">H6
+&lt;/h6>&lt;h2 id="paragraph">Paragraph
+&lt;/h2>&lt;p>Xerum, quo qui aut unt expliquam qui dolut labo. Aque venitatiusda cum, voluptionse latur sitiae dolessi aut parist aut dollo enim qui voluptate ma dolestendit peritin re plis aut quas inctum laceat est volestemque commosa as cus endigna tectur, offic to cor sequas etum rerum idem sintibus eiur? Quianimin porecus evelectur, cum que nis nust voloribus ratem aut omnimi, sitatur? Quiatem. Nam, omnis sum am facea corem alique molestrunt et eos evelece arcillit ut aut eos eos nus, sin conecerem erum fuga. Ri oditatquam, ad quibus unda veliamenimin cusam et facea ipsamus es exerum sitate dolores editium rerore eost, temped molorro ratiae volorro te reribus dolorer sperchicium faceata tiustia prat.&lt;/p>
+&lt;p>Itatur? Quiatae cullecum rem ent aut odis in re eossequodi nonsequ idebis ne sapicia is sinveli squiatum, core et que aut hariosam ex eat.&lt;/p>
+&lt;h2 id="blockquotes">Blockquotes
+&lt;/h2>&lt;p>The blockquote element represents content that is quoted from another source, optionally with a citation which must be within a &lt;code>footer&lt;/code> or &lt;code>cite&lt;/code> element, and optionally with in-line changes such as annotations and abbreviations.&lt;/p>
+&lt;h3 id="blockquote-without-attribution">Blockquote without attribution
+&lt;/h3>&lt;div role="blockquote" class="markdown-blockquote">
+&lt;p>Tiam, ad mint andaepu dandae nostion secatur sequo quae.
+&lt;strong>Note&lt;/strong> that you can use &lt;em>Markdown syntax&lt;/em> within a blockquote.&lt;/p>
+&lt;/div>&lt;h3 id="blockquote-with-attribution">Blockquote with attribution
+&lt;/h3>&lt;div role="blockquote" class="markdown-blockquote">
+&lt;p>Don&amp;rsquo;t communicate by sharing memory, share memory by communicating.&lt;br>
+— &lt;cite>Rob Pike&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>&lt;/cite>&lt;/p>
+&lt;/div>&lt;h2 id="tables">Tables
+&lt;/h2>&lt;p>Tables aren&amp;rsquo;t part of the core Markdown spec, but Hugo supports supports them out-of-the-box.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Name&lt;/th>
+&lt;th>Age&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Bob&lt;/td>
+&lt;td>27&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Alice&lt;/td>
+&lt;td>23&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="inline-markdown-within-tables">Inline Markdown within tables
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Italics&lt;/th>
+&lt;th>Bold&lt;/th>
+&lt;th>Code&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;em>italics&lt;/em>&lt;/td>
+&lt;td>&lt;strong>bold&lt;/strong>&lt;/td>
+&lt;td>&lt;code>code&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>A&lt;/th>
+&lt;th>B&lt;/th>
+&lt;th>C&lt;/th>
+&lt;th>D&lt;/th>
+&lt;th>E&lt;/th>
+&lt;th>F&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.&lt;/td>
+&lt;td>Phasellus ultricies, sapien non euismod aliquam, dui ligula tincidunt odio, at accumsan nulla sapien eget ex.&lt;/td>
+&lt;td>Proin eleifend dictum ipsum, non euismod ipsum pulvinar et. Vivamus sollicitudin, quam in pulvinar aliquam, metus elit pretium purus&lt;/td>
+&lt;td>Proin sit amet velit nec enim imperdiet vehicula.&lt;/td>
+&lt;td>Ut bibendum vestibulum quam, eu egestas turpis gravida nec&lt;/td>
+&lt;td>Sed scelerisque nec turpis vel viverra. Vivamus vitae pretium sapien&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h2 id="code-blocks">Code Blocks
+&lt;/h2>&lt;h3 id="code-block-with-backticks">Code block with backticks
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&amp;lt;!DOCTYPE html&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">html&lt;/span> &lt;span class="na">lang&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;en&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">head&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">meta&lt;/span> &lt;span class="na">charset&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;utf-8&amp;#34;&lt;/span> &lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">title&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>Example HTML5 Document&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">title&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">head&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">body&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>Test&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">body&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">html&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="code-block-indented-with-four-spaces">Code block indented with four spaces
+&lt;/h3>&lt;pre>&lt;code>&amp;lt;!doctype html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+&amp;lt;title&amp;gt;Example HTML5 Document&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;p&amp;gt;Test&amp;lt;/p&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;h3 id="diff-code-block">Diff code block
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-diff" data-lang="diff">&lt;span class="line">&lt;span class="cl">[dependencies.bevy]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git = &amp;#34;https://github.com/bevyengine/bevy&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">rev = &amp;#34;11f52b8c72fc3a568e8bb4a4cd1f3eb025ac2e13&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gd">- features = [&amp;#34;dynamic&amp;#34;]
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gd">&lt;/span>&lt;span class="gi">+ features = [&amp;#34;jpeg&amp;#34;, &amp;#34;dynamic&amp;#34;]
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="one-line-code-block">One line code block
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>A paragraph&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="list-types">List Types
+&lt;/h2>&lt;h3 id="ordered-list">Ordered List
+&lt;/h3>&lt;ol>
+&lt;li>First item&lt;/li>
+&lt;li>Second item&lt;/li>
+&lt;li>Third item&lt;/li>
+&lt;/ol>
+&lt;h3 id="unordered-list">Unordered List
+&lt;/h3>&lt;ul>
+&lt;li>List item&lt;/li>
+&lt;li>Another item&lt;/li>
+&lt;li>And another item&lt;/li>
+&lt;/ul>
+&lt;h3 id="nested-list">Nested list
+&lt;/h3>&lt;ul>
+&lt;li>Fruit
+&lt;ul>
+&lt;li>Apple&lt;/li>
+&lt;li>Orange&lt;/li>
+&lt;li>Banana&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Dairy
+&lt;ul>
+&lt;li>Milk&lt;/li>
+&lt;li>Cheese&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="other-elements--abbr-sub-sup-kbd-mark">Other Elements — abbr, sub, sup, kbd, mark
+&lt;/h2>&lt;p>&lt;abbr title="Graphics Interchange Format">GIF&lt;/abbr> is a bitmap image format.&lt;/p>
+&lt;p>H&lt;sub>2&lt;/sub>O&lt;/p>
+&lt;p>X&lt;sup>n&lt;/sup> + Y&lt;sup>n&lt;/sup> = Z&lt;sup>n&lt;/sup>&lt;/p>
+&lt;p>Press &lt;kbd>CTRL&lt;/kbd> + &lt;kbd>ALT&lt;/kbd> + &lt;kbd>Delete&lt;/kbd> to end the session.&lt;/p>
+&lt;p>Most &lt;mark>salamanders&lt;/mark> are nocturnal, and hunt for insects, worms, and other small creatures.&lt;/p>
+&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>The above quote is excerpted from Rob Pike&amp;rsquo;s &lt;a class="link" href="https://www.youtube.com/watch?v=PAAkCSZUG1c" target="_blank" rel="noopener"
+>talk&lt;/a> during Gopherfest, November 18, 2015.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item></channel></rss>
